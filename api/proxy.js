@@ -37,6 +37,10 @@ function apiRequest(path) {
 }
 
 module.exports = async (req, res) => {
+  // Agregá esto como PRIMERA línea dentro del module.exports = async (req, res) => {
+if (req.query.test) {
+  return res.status(200).json({ version: 'v3', key_len: AES_KEY.length, key_prefix: AES_KEY.toString('hex').substring(0,8) });
+}
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
