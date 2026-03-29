@@ -1,7 +1,7 @@
 const https = require('https');
 const crypto = require('crypto');
 
-const API_HOST = 'api.tournamenttracker.buenosaireshockey.ar';
+const API_HOST = 'api.tournamenttracker.buenosaireshockey.ar'; //v2
 const PASSPHRASE = 'uweoEVNeycw7CFBXtHNCy3nbJZmUPl0EosXGRrNDgdU=';
 const AES_KEY = Buffer.from(PASSPHRASE, 'base64');
 
