@@ -3,21 +3,13 @@ const crypto = require('crypto');
 
 const API_HOST = 'api.tournamenttracker.buenosaireshockey.ar';
 const PASSPHRASE = 'uweoEVNeycw7CFBXtHNCy3nbJZmUPl0EosXGRrNDgdU=';
-const AES_KEY = Buffer.from(PASSPHRASE, 'base64'); // 32 bytes
+const AES_KEY = Buffer.from(PASSPHRASE, 'base64');
 
 function decrypt(hexStr) {
-  // Formato: "ivHex:cipherHex"
-  const colonIdx = hexStr.indexOf(':');
-  if (colonIdx === 32) {
-    const iv = Buffer.from(hexStr.substring(0, 32), 'hex');
-    const cipher = Buffer.from(hexStr.substring(33), 'hex');
-    const decipher = crypto.createDecipheriv('aes-256-cbc', AES_KEY, iv);
-    decipher.setAutoPadding(true);
-    return Buffer.concat([decipher.update(cipher), decipher.final()]).toString('utf8');
-  }
-  // Fallback: sin IV, usar zeros
-  const iv = Buffer.alloc(16, 0);
-  const cipher = Buffer.from(hexStr, 'hex');
+  // Formato: 32 chars IV + ":" + cipherHex
+  const iv = Buffer.from(hexStr.substring(0, 32), 'hex');
+  const cipherHex = hexStr.substring(33); // skip the ":"
+  const cipher = Buffer.from(cipherHex, 'hex');
   const decipher = crypto.createDecipheriv('aes-256-cbc', AES_KEY, iv);
   decipher.setAutoPadding(true);
   return Buffer.concat([decipher.update(cipher), decipher.final()]).toString('utf8');
@@ -56,14 +48,17 @@ module.exports = async (req, res) => {
     const { status, body } = await apiRequest(path);
     const trimmed = body.trim();
 
-    // Intentar parsear como JSON
     try {
       const parsed = JSON.parse(trimmed);
       const keys = Object.keys(parsed);
 
-      // Array de chars hex (keys 0,1,2,...) → reconstruir y desencriptar
-      if (keys.length > 100 && keys[0] === '0' && keys[1] === '1') {
-        const hexStr = Object.values(parsed).join('');
+      // Array de chars hex — reconstruir EN ORDEN NUMÉRICO
+      if (keys.length > 100 && !isNaN(keys[0])) {
+        const maxKey = Math.max(...keys.map(Number));
+        const chars = new Array(maxKey + 1);
+        for (const k of keys) chars[Number(k)] = parsed[k];
+        const hexStr = chars.join('');
+
         try {
           const decrypted = decrypt(hexStr);
           res.setHeader('Content-Type', 'application/json');
@@ -71,17 +66,16 @@ module.exports = async (req, res) => {
         } catch (e) {
           return res.status(200).json({
             error: 'decrypt_failed', message: e.message,
+            hex_len: hexStr.length,
             hex_sample: hexStr.substring(0, 64)
           });
         }
       }
 
-      // JSON normal — devolver tal cual
       res.setHeader('Content-Type', 'application/json');
       return res.status(status).send(trimmed);
     } catch (_) {}
 
-    // Raw text
     res.setHeader('Content-Type', 'text/plain');
     return res.status(status).send(trimmed);
 
