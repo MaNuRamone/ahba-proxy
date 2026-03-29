@@ -41,9 +41,8 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // Test endpoint
   if (req.query.test) {
-    return res.status(200).json({ version: 'v4', key_len: AES_KEY.length, key_prefix: AES_KEY.toString('hex').substring(0,8) });
+    return res.status(200).json({ version: 'v5', key_len: AES_KEY.length });
   }
 
   const path = req.query.path || '/';
@@ -57,23 +56,30 @@ module.exports = async (req, res) => {
       return res.status(200).json({ error: 'not_json', preview: trimmed.substring(0,50) });
     }
 
-    const keys = Object.keys(parsed);
+    const allKeys = Object.keys(parsed);
+    const numericKeys = allKeys.filter(k => /^\d+$/.test(k));
+    const nonNumericKeys = allKeys.filter(k => !/^\d+$/.test(k));
 
-    // Debug: mostrar info del objeto recibido
     if (req.query.debug) {
+      // Reconstruir solo con keys numéricas
+      const sorted = numericKeys.map(Number).sort((a,b)=>a-b);
+      const hexStr = sorted.map(k => parsed[String(k)]).join('');
       return res.status(200).json({
-        total_keys: keys.length,
-        first_keys: keys.slice(0,5),
-        last_keys: keys.slice(-5),
-        first_values: keys.slice(0,5).map(k => parsed[k]),
-        sample_reconstructed: keys.slice(0,80).map(k => parsed[k]).join('')
+        total_keys: allKeys.length,
+        numeric_keys: numericKeys.length,
+        non_numeric_keys: nonNumericKeys,
+        hex_len: hexStr.length,
+        colon_at: hexStr.indexOf(':'),
+        cipher_len_after_colon: hexStr.length - hexStr.indexOf(':') - 1,
+        cipher_bytes: (hexStr.length - hexStr.indexOf(':') - 1) / 2,
+        cipher_mod16: ((hexStr.length - hexStr.indexOf(':') - 1) / 2) % 16,
+        hex_sample: hexStr.substring(0, 80)
       });
     }
 
-    // Reconstruir hex en orden numérico
-    if (keys.length > 100 && !isNaN(keys[0])) {
-      const numKeys = keys.map(Number).sort((a,b) => a-b);
-      const hexStr = numKeys.map(k => parsed[k]).join('');
+    if (numericKeys.length > 100) {
+      const sorted = numericKeys.map(Number).sort((a,b)=>a-b);
+      const hexStr = sorted.map(k => parsed[String(k)]).join('');
 
       try {
         const decrypted = decrypt(hexStr);
@@ -81,12 +87,10 @@ module.exports = async (req, res) => {
         return res.status(200).send(decrypted);
       } catch (e) {
         return res.status(200).json({
-          error: 'decrypt_failed',
-          message: e.message,
+          error: 'decrypt_failed', message: e.message,
           hex_len: hexStr.length,
           colon_at: hexStr.indexOf(':'),
-          iv_hex: hexStr.substring(0, 32),
-          cipher_sample: hexStr.substring(33, 65)
+          cipher_mod16: ((hexStr.length - hexStr.indexOf(':') - 1) / 2) % 16,
         });
       }
     }
