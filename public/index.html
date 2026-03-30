@@ -7,28 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green: #00c853;
-    --green-dim: #00c85322;
-    --green-glow: #00c85355;
-    --dark: #0a0f0d;
-    --card: #111a14;
-    --card2: #162019;
-    --border: #1e2e21;
-    --text: #e8f5e9;
-    --muted: #6b8f72;
-    --red: #ff3d3d;
-    --yellow: #ffd600;
-    --radius: 14px;
+    --green: #00c853; --green-dim: #00c85322; --green-glow: #00c85355;
+    --dark: #0a0f0d; --card: #111a14; --card2: #162019;
+    --border: #1e2e21; --text: #e8f5e9; --muted: #6b8f72;
+    --red: #ff3d3d; --yellow: #ffd600; --radius: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; padding-bottom: 90px; }
 
-  .header { background: linear-gradient(180deg, #0d1f10 0%, var(--dark) 100%); padding: 20px 16px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .header { background: linear-gradient(180deg,#0d1f10,var(--dark)); padding: 20px 16px 12px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .logo-circle { width: 42px; height: 42px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 0 16px var(--green-glow); }
   .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; line-height: 1; }
-  .header-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; }
-  .torneo-badge { margin-left: auto; background: var(--green-dim); border: 1px solid var(--green); border-radius: 20px; padding: 4px 10px; font-size: 11px; color: var(--green); font-weight: 500; white-space: nowrap; }
+  .header-sub { font-size: 11px; color: var(--muted); }
+  .torneo-badge { margin-left: auto; background: var(--green-dim); border: 1px solid var(--green); border-radius: 20px; padding: 4px 10px; font-size: 11px; color: var(--green); font-weight: 500; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 
   .selector-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
   .selector-bar::-webkit-scrollbar { display: none; }
@@ -36,12 +28,12 @@
   .cat-chip.active { background: var(--green); color: var(--dark); border-color: var(--green); font-weight: 700; }
 
   .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1a10ee; backdrop-filter: blur(16px); border-top: 1px solid var(--border); display: flex; z-index: 100; }
-  .nav-tab { flex: 1; padding: 12px 4px 14px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: 0.3px; transition: color 0.2s; border: none; background: none; }
+  .nav-tab { flex: 1; padding: 12px 4px 14px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: var(--muted); font-size: 10px; font-weight: 500; transition: color 0.2s; border: none; background: none; }
   .nav-tab.active { color: var(--green); }
   .nav-tab svg { width: 22px; height: 22px; }
 
   .content { padding: 16px; }
-  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 16px; }
@@ -50,45 +42,44 @@
   .loading p { color: var(--muted); font-size: 14px; }
 
   .error-box { background: #1a0a0a; border: 1px solid #3d1a1a; border-radius: var(--radius); padding: 20px; text-align: center; margin: 20px 0; }
-  .error-box .err-icon { font-size: 32px; margin-bottom: 8px; }
-  .error-box p { color: #ff8080; font-size: 14px; line-height: 1.5; }
-  .error-box small { color: var(--muted); font-size: 11px; display: block; margin-top: 8px; word-break: break-all; }
+  .error-box p { color: #ff8080; font-size: 14px; line-height: 1.6; }
 
   /* POSICIONES */
   .pos-table { width: 100%; border-collapse: collapse; }
   .pos-table thead tr { border-bottom: 1px solid var(--border); }
   .pos-table thead th { font-size: 10px; color: var(--muted); font-weight: 500; padding: 6px 4px; text-align: center; letter-spacing: 0.5px; }
   .pos-table thead th:first-child { text-align: left; padding-left: 0; }
-  .pos-table tbody tr { border-bottom: 1px solid #ffffff08; transition: background 0.15s; }
-  .pos-table tbody tr:hover { background: var(--card); }
+  .pos-table tbody tr { border-bottom: 1px solid #ffffff08; }
   .pos-table td { padding: 10px 4px; font-size: 13px; text-align: center; vertical-align: middle; }
   .pos-table td:first-child { text-align: left; padding-left: 0; }
-  .pos-num { font-size: 11px; color: var(--muted); width: 18px; display: inline-block; }
-  .pos-pts { font-weight: 700; color: var(--green); font-size: 14px; }
-  .team-name { font-weight: 500; font-size: 13px; }
+  .pos-num { font-size: 11px; color: var(--muted); width: 20px; display: inline-block; }
+  .pos-pts { font-weight: 700; color: var(--green); font-size: 15px; }
+  .pos-top1 { color: #ffd600; }
+  .pos-top2 { color: #c0c0c0; }
+  .pos-top3 { color: #cd7f32; }
 
   /* PARTIDOS */
   .match-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; position: relative; overflow: hidden; }
   .match-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--green); opacity: 0.4; }
-  .match-meta { font-size: 10px; color: var(--muted); margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
-  .match-meta .fecha-badge { background: var(--green-dim); color: var(--green); border-radius: 4px; padding: 2px 6px; font-weight: 600; }
+  .match-meta { font-size: 10px; color: var(--muted); margin-bottom: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .fecha-badge { background: var(--green-dim); color: var(--green); border-radius: 4px; padding: 2px 6px; font-weight: 600; }
   .match-teams { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; }
-  .match-team { font-weight: 600; font-size: 14px; }
+  .match-team { font-weight: 600; font-size: 13px; }
   .match-team.home { text-align: right; }
   .match-team.away { text-align: left; }
-  .match-score { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: var(--text); text-align: center; min-width: 70px; }
-  .match-score.pending { font-size: 14px; color: var(--muted); font-family: 'DM Sans'; }
+  .match-score { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; text-align: center; min-width: 70px; }
+  .match-score.pending { font-size: 13px; color: var(--muted); font-family: 'DM Sans'; letter-spacing: 0; }
 
   /* GOLEADORES */
   .scorer-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #ffffff08; }
   .scorer-rank { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--muted); width: 28px; text-align: center; flex-shrink: 0; }
   .scorer-rank.top { color: var(--green); }
-  .scorer-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--card2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-  .scorer-info { flex: 1; }
-  .scorer-name { font-weight: 600; font-size: 14px; }
+  .scorer-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--card2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; }
+  .scorer-info { flex: 1; min-width: 0; }
+  .scorer-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .scorer-club { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .scorer-goals { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--green); }
-  .scorer-goals span { font-size: 12px; color: var(--muted); font-family: 'DM Sans'; }
+  .scorer-goals { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--green); flex-shrink: 0; }
+  .scorer-goals span { font-size: 11px; color: var(--muted); font-family: 'DM Sans'; }
 
   /* EQUIPOS */
   .team-select { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; appearance: none; outline: none; margin-bottom: 16px; }
@@ -97,28 +88,25 @@
   .stat-card .val { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--green); line-height: 1; }
   .stat-card .val.red { color: var(--red); }
   .stat-card .val.yellow { color: var(--yellow); }
-  .stat-card .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
+  .stat-card .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
   .last3 { display: flex; gap: 6px; margin-bottom: 16px; }
   .last3-item { flex: 1; border-radius: 10px; padding: 10px 6px; text-align: center; border: 1px solid transparent; }
-  .last3-item.W { background: #00c85318; border-color: #00c85340; }
-  .last3-item.D { background: #ffd60018; border-color: #ffd60040; }
-  .last3-item.L { background: #ff3d3d18; border-color: #ff3d3d40; }
+  .last3-item.W { background:#00c85318; border-color:#00c85340; }
+  .last3-item.D { background:#ffd60018; border-color:#ffd60040; }
+  .last3-item.L { background:#ff3d3d18; border-color:#ff3d3d40; }
   .last3-result { font-family: 'Bebas Neue', sans-serif; font-size: 26px; }
   .last3-item.W .last3-result { color: var(--green); }
   .last3-item.D .last3-result { color: var(--yellow); }
   .last3-item.L .last3-result { color: var(--red); }
   .last3-score { font-size: 16px; font-weight: 700; margin: 2px 0; }
-  .last3-opp { font-size: 10px; color: var(--muted); }
+  .last3-opp { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .view-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
   .view-tab { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px; font-size: 12px; color: var(--muted); cursor: pointer; text-align: center; transition: all 0.2s; }
   .view-tab.active { background: var(--green-dim); border-color: var(--green); color: var(--green); font-weight: 600; }
-
-  /* DEBUG panel */
-  .debug-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin: 12px 0; font-size: 11px; color: var(--muted); word-break: break-all; max-height: 200px; overflow-y: auto; }
-  .debug-box pre { white-space: pre-wrap; }
-
   .hidden { display: none !important; }
+  .empty { color: var(--muted); text-align: center; padding: 30px; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -128,7 +116,7 @@
     <div class="logo-circle">🏑</div>
     <div>
       <div class="header-title">AHBA Hockey</div>
-      <div class="header-sub">Buenos Aires · 2025</div>
+      <div class="header-sub" id="header-sub">Buenos Aires · 2025</div>
     </div>
     <div class="torneo-badge" id="torneo-name">Cargando...</div>
   </div>
@@ -136,7 +124,7 @@
 </div>
 
 <div class="content" id="main-content">
-  <div class="loading"><div class="spinner"></div><p>Conectando con el proxy...</p></div>
+  <div class="loading"><div class="spinner"></div><p>Cargando torneo...</p></div>
 </div>
 
 <nav class="nav-tabs">
@@ -159,10 +147,7 @@
 </nav>
 
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// CONFIGURACIÓN — cambiá PROXY_BASE por tu URL de Vercel
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const PROXY_BASE = 'https://ahba-proxy.vercel.app/'; // ← reemplazar después del deploy
+const PROXY = 'https://ahba-proxy.vercel.app';
 const TORNEO_ID = '00000461';
 
 let torneoData = null;
@@ -170,40 +155,29 @@ let currentTab = 'posiciones';
 let currentZona = null;
 let currentEquipo = null;
 
-// ─── FETCH VÍA PROXY ─────────────────────────────────────
-async function fetchAPI(path) {
-  const url = `${PROXY_BASE}/api/proxy?path=${encodeURIComponent(path)}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status} — ${await res.text()}`);
-  return res.json();
+async function fetchProxy(path) {
+  const r = await fetch(`${PROXY}/api/proxy?path=${encodeURIComponent(path)}`);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
 }
 
-// ─── INIT ─────────────────────────────────────────────────
 async function init() {
   setContent(`<div class="loading"><div class="spinner"></div><p>Cargando torneo...</p></div>`);
   try {
-    torneoData = await fetchAPI(`/torneos/${TORNEO_ID}`);
+    torneoData = await fetchProxy(`/torneos/${TORNEO_ID}`);
   } catch(e) {
-    setContent(`
-      <div class="error-box">
-        <div class="err-icon">⚠️</div>
-        <p>No se pudo conectar al proxy.</p>
-        <small>${e.message}</small>
-      </div>
-      <div class="debug-box">
-        <b>URL del proxy:</b><br>${PROXY_BASE}/api/proxy?path=/torneos/${TORNEO_ID}<br><br>
-        <b>¿Configuraste PROXY_BASE?</b><br>Reemplazá "TU-PROYECTO" por tu URL de Vercel en el código.
-      </div>
-    `);
-    document.getElementById('torneo-name').textContent = 'Sin proxy';
+    setContent(`<div class="error-box"><p>❌ No se pudo conectar al proxy.<br>${e.message}</p></div>`);
     return;
   }
 
-  console.log('Torneo data:', torneoData);
-
-  const nombre = torneoData.nombre || torneoData.name || torneoData.titulo || `Torneo ${TORNEO_ID}`;
+  // Nombre del torneo
+  const det = torneoData.detalle || {};
+  const nombre = det.nombreTorneo || det.nombre || `Torneo ${TORNEO_ID}`;
+  const cat = det.categoria?.categoriaNombre || det.categoria || '';
   document.getElementById('torneo-name').textContent = nombre;
+  if (cat) document.getElementById('header-sub').textContent = `${cat} · Buenos Aires`;
 
+  // Zonas: están en fases[0].zonas
   const zonas = getZonas();
   if (zonas.length > 0) {
     currentZona = zonas[0];
@@ -215,19 +189,18 @@ async function init() {
 
 function getZonas() {
   if (!torneoData) return [];
-  if (Array.isArray(torneoData)) return torneoData;
-  if (torneoData.zonas) return torneoData.zonas;
-  if (torneoData.grupos) return torneoData.grupos;
-  if (torneoData.categorias) return torneoData.categorias;
-  if (torneoData.divisions) return torneoData.divisions;
-  if (torneoData.zones) return torneoData.zones;
-  return [torneoData];
+  const fases = torneoData.fases || [];
+  if (fases.length > 0) {
+    const fase = fases[0];
+    return fase.zonas || fase.divisions || fase.grupos || [];
+  }
+  return [];
 }
 
 function buildZonaSelector(zonas) {
   const sel = document.getElementById('zona-selector');
   sel.innerHTML = zonas.map((z, i) => {
-    const n = z.nombre || z.name || z.zona || z.grupo || `Zona ${i+1}`;
+    const n = z.nombre || z.name || z.zona || `Zona ${i+1}`;
     return `<div class="cat-chip ${i===0?'active':''}" onclick="selectZona(${i},this)">${n}</div>`;
   }).join('');
 }
@@ -248,38 +221,70 @@ function showTab(tab) {
 }
 
 function renderTab(tab) {
-  const map = { posiciones: renderPosiciones, resultados: renderResultados, goleadores: renderGoleadores, equipos: renderEquipos };
-  map[tab]?.();
+  ({posiciones:renderPosiciones, resultados:renderResultados, goleadores:renderGoleadores, equipos:renderEquipos})[tab]?.();
 }
 
 function setContent(html) { document.getElementById('main-content').innerHTML = html; }
 
-// ─── GETTERS GENÉRICOS ────────────────────────────────────
-const get = (obj, ...keys) => { for (const k of keys) { if (obj?.[k] != null) return obj[k]; } return null; };
-function getEquipos(z) { return get(z,'equipos','teams','clubs','participantes') || []; }
-function getPartidos(z) { return get(z,'partidos','matches','fixtures','games','encuentros') || []; }
-function getGoleadores(z) { return get(z,'goleadores','scorers','artilleros') || []; }
-function formatDate(d) { try { return new Date(d).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'}); } catch(e){return d||'';} }
+// ── HELPERS ──────────────────────────────────────────────────────
+function getEquipos(zona) {
+  if (!zona) return [];
+  return zona.equipos || zona.teams || zona.tabla || [];
+}
 
-// ─── POSICIONES ───────────────────────────────────────────
+function getPartidos(zona) {
+  if (!zona) return [];
+  // Los partidos pueden estar en la zona directamente o en fases
+  let ps = zona.partidos || zona.matches || zona.encuentros || [];
+  if (ps.length === 0 && torneoData?.fases?.[0]?.partidos) ps = torneoData.fases[0].partidos;
+  // Filtrar partidos de esta zona
+  if (ps.length > 0 && zona.nombre) {
+    const filtered = ps.filter(p => p.zona === zona.nombre || p.zonaNombre === zona.nombre);
+    if (filtered.length > 0) return filtered;
+  }
+  return ps;
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  try { return new Date(d).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'}); } catch(e){return '';}
+}
+
+// ── POSICIONES ────────────────────────────────────────────────────
 function renderPosiciones() {
   const equipos = getEquipos(currentZona);
   if (!equipos.length) {
-    return setContent(`<div class="error-box"><div class="err-icon">📊</div><p>No se encontraron equipos.</p><small>Keys disponibles: ${Object.keys(currentZona||{}).join(', ')}</small></div>`);
+    return setContent(`<div class="error-box"><p>No hay datos de posiciones para esta zona.</p></div>`);
   }
-  const sorted = [...equipos].sort((a,b)=>(get(b,'puntos','pts','points')||0)-(get(a,'puntos','pts','points')||0));
+
+  const sorted = [...equipos].sort((a,b)=>{
+    const pa = a.puntos??a.pts??a.points??0;
+    const pb = b.puntos??b.pts??b.points??0;
+    if (pb !== pa) return pb - pa;
+    // Desempate por DG
+    const da = (a.golesFavor??a.gf??0)-(a.golesContra??a.gc??0);
+    const db = (b.golesFavor??b.gf??0)-(b.golesContra??b.gc??0);
+    return db - da;
+  });
+
   const rows = sorted.map((eq,i)=>{
-    const n  = get(eq,'nombre','name','equipo','club') || `Equipo ${i+1}`;
-    const pts= get(eq,'puntos','pts','points') ?? '-';
-    const pj = get(eq,'partidosJugados','pj','played','gamesPlayed') ?? '-';
-    const pg = get(eq,'partidosGanados','pg','won','ganados') ?? '-';
-    const pe = get(eq,'partidosEmpatados','pe','drawn','empatados') ?? '-';
-    const pp = get(eq,'partidosPerdidos','pp','lost','perdidos') ?? '-';
-    const gf = get(eq,'golesFavor','gf','goalsFor','goals_for') ?? 0;
-    const gc = get(eq,'golesContra','gc','goalsAgainst','goals_against') ?? 0;
-    const dg = (gf!==0||gc!==0) ? `${gf-gc>0?'+':''}${gf-gc}` : '-';
-    return `<tr><td><span class="pos-num">${i+1}</span><span class="team-name"> ${n}</span></td><td>${pj}</td><td>${pg}</td><td>${pe}</td><td>${pp}</td><td>${dg}</td><td><span class="pos-pts">${pts}</span></td></tr>`;
+    const n  = eq.nombre||eq.name||eq.equipo||eq.club||`Equipo ${i+1}`;
+    const pts= eq.puntos??eq.pts??eq.points??'-';
+    const pj = eq.partidosJugados??eq.pj??eq.played??'-';
+    const pg = eq.ganados??eq.pg??eq.won??'-';
+    const pe = eq.empatados??eq.pe??eq.drawn??'-';
+    const pp = eq.perdidos??eq.pp??eq.lost??'-';
+    const gf = eq.golesFavor??eq.gf??eq.goalsFor??0;
+    const gc = eq.golesContra??eq.gc??eq.goalsAgainst??0;
+    const dg = (typeof gf==='number'&&typeof gc==='number') ? `${gf-gc>0?'+':''}${gf-gc}` : '-';
+    const rankClass = i===0?'pos-top1':i===1?'pos-top2':i===2?'pos-top3':'';
+    return `<tr>
+      <td><span class="pos-num ${rankClass}">${i+1}</span> ${n}</td>
+      <td>${pj}</td><td>${pg}</td><td>${pe}</td><td>${pp}</td><td>${dg}</td>
+      <td><span class="pos-pts">${pts}</span></td>
+    </tr>`;
   }).join('');
+
   setContent(`<div class="section-title">Tabla de Posiciones</div>
     <table class="pos-table">
       <thead><tr><th style="text-align:left">Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>DG</th><th>PTS</th></tr></thead>
@@ -287,30 +292,30 @@ function renderPosiciones() {
     </table>`);
 }
 
-// ─── FIXTURE ──────────────────────────────────────────────
+// ── FIXTURE ───────────────────────────────────────────────────────
 function renderResultados() {
   const partidos = getPartidos(currentZona);
   if (!partidos.length) {
-    return setContent(`<div class="error-box"><div class="err-icon">🗓️</div><p>No hay partidos disponibles.</p><small>Keys: ${Object.keys(currentZona||{}).join(', ')}</small></div>`);
+    return setContent(`<div class="error-box"><p>No hay partidos disponibles.</p></div>`);
   }
-  const jugados   = partidos.filter(p=>get(p,'golesLocal','golesHome','scoreHome','home_score','local_goles')!=null).reverse().slice(0,30);
-  const pendientes= partidos.filter(p=>get(p,'golesLocal','golesHome','scoreHome','home_score','local_goles')==null).slice(0,20);
+
+  const jugados = partidos.filter(p=>p.played||p.jugado||(p.golesLocal!=null&&p.golesLocal!=='')).reverse().slice(0,30);
+  const pendientes = partidos.filter(p=>!p.played&&!p.jugado&&(p.golesLocal==null||p.golesLocal==='')).slice(0,20);
 
   function card(p, pending) {
-    const home  = get(p,'equipoLocal','local','homeTeam','home','equipo_local') || 'Local';
-    const away  = get(p,'equipoVisitante','visitante','awayTeam','away','equipo_visitante') || 'Visitante';
-    const hg    = get(p,'golesLocal','golesHome','scoreHome','home_score','local_goles') ?? '';
-    const ag    = get(p,'golesVisitante','golesAway','scoreAway','away_score','visitante_goles') ?? '';
-    const fecha = get(p,'fecha','date') || '';
-    const jorn  = get(p,'jornada','round','fecha_numero') || '';
-    const hora  = get(p,'hora','time') || '';
+    const home = p.nombreLocal||p.local||p.homeTeam||p.equipoLocal||'Local';
+    const away = p.nombreVisitante||p.visitante||p.awayTeam||p.equipoVisitante||'Visitante';
+    const hg = p.golesLocal??p.golesHome??'';
+    const ag = p.golesVisitante??p.golesAway??'';
+    const fecha = p.horario||p.fecha||p.date||'';
+    const jorn = p.numeroFecha||p.jornada||p.round||'';
     const score = pending
-      ? `<div class="match-score pending">${hora||'Pendiente'}</div>`
+      ? `<div class="match-score pending">${fecha?formatDate(fecha):'Pendiente'}</div>`
       : `<div class="match-score">${hg} - ${ag}</div>`;
     return `<div class="match-card">
       <div class="match-meta">
         ${jorn?`<span class="fecha-badge">F${jorn}</span>`:''}
-        ${fecha?`<span>${formatDate(fecha)}</span>`:''}
+        ${fecha&&!pending?`<span>${formatDate(fecha)}</span>`:''}
       </div>
       <div class="match-teams">
         <div class="match-team home">${home}</div>${score}<div class="match-team away">${away}</div>
@@ -323,82 +328,101 @@ function renderResultados() {
       <div class="view-tab active" id="vt-jugados" onclick="toggleView('jugados')">Jugados (${jugados.length})</div>
       <div class="view-tab" id="vt-proximos" onclick="toggleView('proximos')">Próximos (${pendientes.length})</div>
     </div>
-    <div id="view-jugados">${jugados.map(p=>card(p,false)).join('')||'<p style="color:var(--muted);text-align:center;padding:20px">Sin resultados</p>'}</div>
-    <div id="view-proximos" class="hidden">${pendientes.map(p=>card(p,true)).join('')||'<p style="color:var(--muted);text-align:center;padding:20px">Sin próximos</p>'}</div>`);
+    <div id="view-jugados">${jugados.map(p=>card(p,false)).join('')||'<p class="empty">Sin resultados</p>'}</div>
+    <div id="view-proximos" class="hidden">${pendientes.map(p=>card(p,true)).join('')||'<p class="empty">Sin próximos partidos</p>'}</div>`);
 }
 
 window.toggleView = function(v) {
   document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(`vt-${v}`).classList.add('active');
-  document.getElementById('view-jugados').classList.toggle('hidden', v!=='jugados');
-  document.getElementById('view-proximos').classList.toggle('hidden', v!=='proximos');
+  document.getElementById('view-jugados').classList.toggle('hidden',v!=='jugados');
+  document.getElementById('view-proximos').classList.toggle('hidden',v!=='proximos');
 };
 
-// ─── GOLEADORES ───────────────────────────────────────────
+// ── GOLEADORES ────────────────────────────────────────────────────
 function renderGoleadores() {
-  let goles = getGoleadores(currentZona);
+  // Goleadores pueden estar en torneoData.goleadores o dentro de zona
+  let goles = torneoData?.goleadores || currentZona?.goleadores || [];
+
+  // Si no hay lista, extraer de partidos
   if (!goles.length) {
-    getEquipos(currentZona).forEach(eq=>{
-      (get(eq,'jugadores','players')||[]).forEach(j=>{
-        if ((get(j,'goles','goals','golesAnotados')||0)>0) goles.push({...j,club:get(eq,'nombre','name','club')});
+    const mapa = {};
+    getPartidos(currentZona).forEach(p => {
+      (p.resumenEventosJugadores||p.resumenEventosOficiales||[]).forEach(ev => {
+        if (ev.tipo==='GOL'||ev.type==='goal'||ev.goles>0) {
+          const key = ev.jugadorId||ev.nombre||ev.name;
+          if (!mapa[key]) mapa[key] = { nombre: ev.nombre||ev.name||key, club: ev.equipo||ev.team||'', goles: 0 };
+          mapa[key].goles += ev.goles||1;
+        }
       });
     });
+    goles = Object.values(mapa);
   }
-  if (!goles.length) return setContent(`<div class="error-box"><div class="err-icon">⭐</div><p>No hay datos de goleadores.</p></div>`);
-  const sorted = [...goles].sort((a,b)=>(get(b,'goles','goals','golesAnotados')||0)-(get(a,'goles','goals','golesAnotados')||0)).slice(0,30);
+
+  if (!goles.length) {
+    return setContent(`<div class="error-box"><p>No hay datos de goleadores disponibles.</p></div>`);
+  }
+
+  const sorted = [...goles].sort((a,b)=>(b.goles??b.goals??0)-(a.goles??a.goals??0)).slice(0,30);
+
   const rows = sorted.map((g,i)=>{
-    const n = get(g,'nombre','name','jugador')||`Jugador ${i+1}`;
-    const c = get(g,'club','equipo','team')||'';
-    const gl= get(g,'goles','goals','golesAnotados')||0;
+    const n = g.nombre||g.name||g.jugador||`Jugador ${i+1}`;
+    const c = g.club||g.equipo||g.team||g.nombreClub||'';
+    const gl = g.goles??g.goals??0;
     return `<div class="scorer-row">
       <div class="scorer-rank ${i<3?'top':''}">${i+1}</div>
       <div class="scorer-avatar">${n.charAt(0)}</div>
       <div class="scorer-info"><div class="scorer-name">${n}</div>${c?`<div class="scorer-club">${c}</div>`:''}</div>
-      <div class="scorer-goals">${gl} <span>goles</span></div>
+      <div class="scorer-goals">${gl}<span>gls</span></div>
     </div>`;
   }).join('');
+
   setContent(`<div class="section-title">Goleadores</div>${rows}`);
 }
 
-// ─── EQUIPOS ──────────────────────────────────────────────
+// ── EQUIPOS ───────────────────────────────────────────────────────
 function renderEquipos() {
   const equipos = getEquipos(currentZona);
   const partidos = getPartidos(currentZona);
-  if (!equipos.length) return setContent(`<div class="error-box"><div class="err-icon">👥</div><p>No hay equipos.</p></div>`);
+  if (!equipos.length) return setContent(`<div class="error-box"><p>No hay equipos disponibles.</p></div>`);
   if (!currentEquipo) currentEquipo = equipos[0];
 
   const options = equipos.map(eq=>{
-    const n = get(eq,'nombre','name','club','equipo')||'';
+    const n = eq.nombre||eq.name||eq.club||'';
     return `<option value="${n}" ${eq===currentEquipo?'selected':''}>${n}</option>`;
   }).join('');
 
   function teamStats(eq) {
-    const nombre = get(eq,'nombre','name','club','equipo')||'';
-    const pts = get(eq,'puntos','pts','points')||0;
-    const pj  = get(eq,'partidosJugados','pj','played')||0;
-    const pg  = get(eq,'partidosGanados','pg','won')||0;
-    const pe  = get(eq,'partidosEmpatados','pe','drawn')||0;
-    const pp  = get(eq,'partidosPerdidos','pp','lost')||0;
-    const gf  = get(eq,'golesFavor','gf','goalsFor')||0;
-    const gc  = get(eq,'golesContra','gc','goalsAgainst')||0;
+    const nombre = eq.nombre||eq.name||eq.club||'';
+    const pts = eq.puntos??eq.pts??0;
+    const pj  = eq.partidosJugados??eq.pj??eq.played??0;
+    const pg  = eq.ganados??eq.pg??eq.won??0;
+    const pe  = eq.empatados??eq.pe??eq.drawn??0;
+    const pp  = eq.perdidos??eq.pp??eq.lost??0;
+    const gf  = eq.golesFavor??eq.gf??0;
+    const gc  = eq.golesContra??eq.gc??0;
 
     const ultimos = partidos.filter(p=>{
-      const h = get(p,'equipoLocal','local','homeTeam','home')||'';
-      const a = get(p,'equipoVisitante','visitante','awayTeam','away')||'';
-      return (h===nombre||a===nombre) && get(p,'golesLocal','golesHome','scoreHome','home_score')!=null;
+      const h = p.nombreLocal||p.local||p.homeTeam||'';
+      const a = p.nombreVisitante||p.visitante||p.awayTeam||'';
+      return (h===nombre||a===nombre)&&(p.golesLocal!=null&&p.golesLocal!=='');
     }).slice(-3);
 
     let last3 = '';
     if (ultimos.length) {
-      last3 = `<div class="section-title" style="font-size:16px;margin-bottom:8px">Últimos 3 partidos</div>
+      last3 = `<div class="section-title" style="font-size:16px;margin-bottom:8px">Últimos partidos</div>
       <div class="last3">${ultimos.map(p=>{
-        const isH = (get(p,'equipoLocal','local','homeTeam')||'')=== nombre;
-        const myG = isH ? (get(p,'golesLocal','golesHome','scoreHome','home_score')||0) : (get(p,'golesVisitante','golesAway','scoreAway','away_score')||0);
-        const thG = isH ? (get(p,'golesVisitante','golesAway','scoreAway','away_score')||0) : (get(p,'golesLocal','golesHome','scoreHome','home_score')||0);
-        const opp = isH ? (get(p,'equipoVisitante','visitante','awayTeam')||'Rival') : (get(p,'equipoLocal','local','homeTeam')||'Rival');
-        const res = myG>thG?'W':myG<thG?'L':'D';
-        const lbl = res==='W'?'G':res==='L'?'P':'E';
-        return `<div class="last3-item ${res}"><div class="last3-result">${lbl}</div><div class="last3-score">${myG}-${thG}</div><div class="last3-opp">${opp.split(' ')[0]}</div></div>`;
+        const isH=(p.nombreLocal||p.local||'')===nombre;
+        const myG=isH?(p.golesLocal??0):(p.golesVisitante??0);
+        const thG=isH?(p.golesVisitante??0):(p.golesLocal??0);
+        const opp=isH?(p.nombreVisitante||p.visitante||'Rival'):(p.nombreLocal||p.local||'Rival');
+        const res=myG>thG?'W':myG<thG?'L':'D';
+        const lbl=res==='W'?'G':res==='L'?'P':'E';
+        return `<div class="last3-item ${res}">
+          <div class="last3-result">${lbl}</div>
+          <div class="last3-score">${myG}-${thG}</div>
+          <div class="last3-opp">${opp.split(' ')[0]}</div>
+        </div>`;
       }).join('')}</div>`;
     }
 
@@ -420,8 +444,7 @@ function renderEquipos() {
 }
 
 window.selectTeam = function(nombre) {
-  const equipos = getEquipos(currentZona);
-  currentEquipo = equipos.find(eq=>(get(eq,'nombre','name','club','equipo')||'')===nombre)||equipos[0];
+  currentEquipo = getEquipos(currentZona).find(eq=>(eq.nombre||eq.name||eq.club||'')===nombre)||getEquipos(currentZona)[0];
   renderEquipos();
 };
 
