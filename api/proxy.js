@@ -3,14 +3,14 @@ const crypto = require('crypto');
 
 const API_HOST = 'api.tournamenttracker.buenosaireshockey.ar';
 const PASSPHRASE = 'uweoEVNeycw7CFBXtHNCy3nbJZmUPl0EosXGRrNDgdU=';
-const AES_KEY = Buffer.from(PASSPHRASE, 'base64');
+const AES_KEY = Buffer.from(PASSPHRASE, 'base64'); // 32 bytes
 
 function decrypt(hexStr) {
+  // Formato: ivHex:cipherHex — AES-256-CTR (no padding needed)
   const colonIdx = hexStr.indexOf(':');
   const iv = Buffer.from(hexStr.substring(0, colonIdx), 'hex');
   const cipher = Buffer.from(hexStr.substring(colonIdx + 1), 'hex');
-  const decipher = crypto.createDecipheriv('aes-256-cbc', AES_KEY, iv);
-  decipher.setAutoPadding(true);
+  const decipher = crypto.createDecipheriv('aes-256-ctr', AES_KEY, iv);
   return Buffer.concat([decipher.update(cipher), decipher.final()]).toString('utf8');
 }
 
@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.query.test) {
-    return res.status(200).json({ version: 'v5', key_len: AES_KEY.length });
+    return res.status(200).json({ version: 'v6-ctr', key_len: AES_KEY.length });
   }
 
   const path = req.query.path || '/';
@@ -58,24 +58,6 @@ module.exports = async (req, res) => {
 
     const allKeys = Object.keys(parsed);
     const numericKeys = allKeys.filter(k => /^\d+$/.test(k));
-    const nonNumericKeys = allKeys.filter(k => !/^\d+$/.test(k));
-
-    if (req.query.debug) {
-      // Reconstruir solo con keys numéricas
-      const sorted = numericKeys.map(Number).sort((a,b)=>a-b);
-      const hexStr = sorted.map(k => parsed[String(k)]).join('');
-      return res.status(200).json({
-        total_keys: allKeys.length,
-        numeric_keys: numericKeys.length,
-        non_numeric_keys: nonNumericKeys,
-        hex_len: hexStr.length,
-        colon_at: hexStr.indexOf(':'),
-        cipher_len_after_colon: hexStr.length - hexStr.indexOf(':') - 1,
-        cipher_bytes: (hexStr.length - hexStr.indexOf(':') - 1) / 2,
-        cipher_mod16: ((hexStr.length - hexStr.indexOf(':') - 1) / 2) % 16,
-        hex_sample: hexStr.substring(0, 80)
-      });
-    }
 
     if (numericKeys.length > 100) {
       const sorted = numericKeys.map(Number).sort((a,b)=>a-b);
@@ -86,12 +68,7 @@ module.exports = async (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).send(decrypted);
       } catch (e) {
-        return res.status(200).json({
-          error: 'decrypt_failed', message: e.message,
-          hex_len: hexStr.length,
-          colon_at: hexStr.indexOf(':'),
-          cipher_mod16: ((hexStr.length - hexStr.indexOf(':') - 1) / 2) % 16,
-        });
+        return res.status(200).json({ error: 'decrypt_failed', message: e.message });
       }
     }
 
